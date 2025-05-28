@@ -125,9 +125,7 @@
         <input class="submit" type="submit" value="Enviar">
     </div>
 
-    <div class="input-span">
-        <a href="/manejo_sesiones/index.html" class="submit" >Volver al inicio</a>
-    </div>
+
 
 </form>
 

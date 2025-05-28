@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.util.Optional;
 
 // Definición del Servlet que manejará las rutas /login y /login.html
-@WebServlet({"/login", "/login.html"})
+@WebServlet({"/login"})
 public class LoginServlet extends HttpServlet {
 
     final static String USERNAME = "admin";
@@ -25,33 +25,10 @@ public class LoginServlet extends HttpServlet {
         Optional<String> usernameOptional = auth.getUserName(req);
 
         if (usernameOptional.isPresent()) {
-            resp.setContentType("text/html;charset=UTF-8");
-
-            try (PrintWriter out = resp.getWriter()) {
-                out.print("<!DOCTYPE html>");
-                out.println("<html lang='es'>");
-                out.println("<head>");
-                out.println("<meta charset='UTF-8'>");
-                out.println("<meta name='viewport' content='width=device-width, initial-scale=1.0'>");
-                out.println("<title>Bienvenido " + usernameOptional.get() + "</title>");
-                out.println("<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>");
-                out.println("</head>");
-                out.println("<body>");
-
-                out.println("<div class='container mt-5'>");
-                out.println("<div class='alert alert-success text-center'>");
-                out.println("<h1 class='mb-3'>¡Hola, " + usernameOptional.get() + "!</h1>");
-                out.println("<p>Ya iniciaste sesión anteriormente. </p>");
-                out.println("<a href='index.html' class='btn btn-primary mt-3'>Volver al inicio</a>");
-                out.println("</div>");
-                out.println("</div>");
-
-                out.println("<script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'></script>");
-                out.println("</body>");
-                out.println("</html>");
-            }
+            // Aquí no deberías mostrar la pantalla nuevamente,
+            // simplemente redirige a productos directamente.
+            resp.sendRedirect("productos");
         } else {
-            // Usuario no autenticado, mostrar login.jsp
             getServletContext().getRequestDispatcher("/login.jsp").forward(req, resp);
         }
     }
@@ -66,7 +43,7 @@ public class LoginServlet extends HttpServlet {
         if (username.equals(USERNAME) && password.equals(PASSWORD)) {
             HttpSession session = req.getSession();
             session.setAttribute("username", username);
-            resp.sendRedirect("login.html");
+            resp.sendRedirect("productos");
         } else {
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Lo sentimos, no tiene acceso.");
         }

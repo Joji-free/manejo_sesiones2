@@ -5,14 +5,14 @@ package org.anderson.manejosesiones.models;
 public class Categoria {
     //Implementamos e inicializamos las variables de objet
     //encapsulamos
-    private Integer idCategoria;
+    private Long idCategoria;
     private String nombre;
     private String descripcion;
     private int condicion;
     public Categoria(){
 
     }
-    public Categoria(Integer idCategoria, String nombre, String descripcion, int condicion) {
+    public Categoria(Long idCategoria, String nombre, String descripcion, int condicion) {
         this.idCategoria = idCategoria;
         this.nombre= nombre;
         this.descripcion = descripcion;
@@ -20,11 +20,11 @@ public class Categoria {
     }
     //Implementamos los metodos get and set
 
-    public Integer getIdCategoria() {
+    public Long getIdCategoria() {
         return idCategoria;
     }
 
-    public void setIdCategoria(int idCategoria) {
+    public void setIdCategoria(Long idCategoria) {
         this.idCategoria = idCategoria;
     }
 
