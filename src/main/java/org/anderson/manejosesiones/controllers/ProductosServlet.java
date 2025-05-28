@@ -31,63 +31,74 @@ public class ProductosServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
 
         out.print("<!DOCTYPE html>");
-        out.println("<html>");
+        out.println("<html lang='es'>");
         out.println("<head>");
-        out.println("<meta charset=\"utf-8\">");
-        out.println("<title>Listar Producto</title>");
-        out.println("<style>");
-        out.println("body { font-family: Arial, sans-serif; margin: 20px; }");
-        out.println("table { border-collapse: collapse; width: 80%; margin: 20px auto; }");
-        out.println("th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }");
-        out.println("th { background-color: #f2f2f2; }");
-        out.println(".btn { display: inline-block; padding: 8px 16px; background-color: #4CAF50; ");
-        out.println("color: white; text-decoration: none; border-radius: 4px; margin-top: 20px; }");
-        out.println(".btn:hover { background-color: #45a049; }");
-        out.println(".container { text-align: center; }");
-        out.println("</style>");
+        out.println("<meta charset='UTF-8'>");
+        out.println("<meta name='viewport' content='width=device-width, initial-scale=1.0'>");
+        out.println("<title>Productos</title>");
+        out.println("<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>");
+        out.println("<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css'>");
         out.println("</head>");
         out.println("<body>");
-        out.println("<div class=\"container\">");
-        out.println("<h1>Lista de Productos</h1>");
 
+        // Contenedor principal con menú lateral
+        out.println("<div class='d-flex'>");
+
+        // Sidebar
+        out.println("<div class='bg-light p-3' style='min-width: 200px; height: 100vh;'>");
+        out.println("<h4 class='text-primary mb-4'>AndyProductos</h4>");
+        out.println("<ul class='nav flex-column'>");
+        out.println("<li class='nav-item'><a class='nav-link' href='index.html'><i class='bi bi-speedometer2'></i> Escritorio</a></li>");
+        out.println("<li class='nav-item'><a class='nav-link' href='logout'><i class='bi bi-box-arrow-in-right'></i> Logout</a></li>");
+        out.println("</ul>");
+        out.println("</div>");
+
+        // Contenido principal
+        out.println("<div class='container-fluid p-5'>");
+
+        // Encabezado
+        out.println("<div class='d-flex justify-content-between align-items-center mb-4'>");
+        out.println("<h2><i class='bi bi-box-seam'></i> Productos</h2>");
         if (usernameOptional.isPresent()) {
-            out.println("<h2>Bienvenido, " + usernameOptional.get() + "</h2>");
-            out.println("<table>");
-            out.println("<tr>");
-            out.println("<th>ID PRODUCTO</th>");
-            out.println("<th>NOMBRE</th>");
-            out.println("<th>CATEGORIA</th>");
-            out.println("<th>PRECIO</th>");
-            out.println("</tr>");
+            out.println("<span class='badge text-bg-success'>Bienvenido, " + usernameOptional.get() + "</span>");
+        }
+        out.println("</div>");
 
-            productos.forEach(p -> {
-                out.println("<tr>");
-                out.println("<td>" + p.getIdProducto() + "</td>");
-                out.println("<td>" + p.getNombreProducto() + "</td>");
-                out.println("<td>" + p.getCategoria() + "</td>");
-                out.println("<td>" + p.getPrecioProducto() + "</td>");
-                out.println("</tr>");
-            });
-        } else {
-            out.println("<table>");
-            out.println("<tr>");
-            out.println("<th>ID PRODUCTO</th>");
-            out.println("<th>NOMBRE</th>");
-            out.println("<th>CATEGORIA</th>");
-            out.println("</tr>");
+        // Tabla de productos
+        out.println("<table class='table table-bordered table-hover'>");
+        out.println("<thead class='table-primary'>");
+        out.println("<tr>");
+        out.println("<th>ID</th>");
+        out.println("<th>Nombre</th>");
+        out.println("<th>Categoría</th>");
+        out.println("<th>Precio</th>");
+        out.println("<th>Opciones</th>");
+        out.println("</tr>");
+        out.println("</thead>");
+        out.println("<tbody>");
 
-            productos.forEach(p -> {
-                out.println("<tr>");
-                out.println("<td>" + p.getIdProducto() + "</td>");
-                out.println("<td>" + p.getNombreProducto() + "</td>");
-                out.println("<td>" + p.getCategoria() + "</td>");
-                out.println("</tr>");
-            });
+        for (Productos p : productos) {
+            out.println("<tr>");
+            out.println("<td>" + p.getIdProducto() + "</td>");
+            out.println("<td>" + p.getNombreProducto() + "</td>");
+            out.println("<td>" + p.getCategoria() + "</td>");
+            out.println("<td>$" + p.getPrecioProducto() + "</td>");
+            out.println("<td>");
+            out.println("<a href='editarProducto?id=" + p.getIdProducto() + "' class='btn btn-warning btn-sm me-1'><i class='bi bi-pencil'></i> Editar</a>");
+                out.println("<a href='cambiarEstado?id=" + p.getIdProducto() + "&estado=0' class='btn btn-secondary btn-sm'>Desactivar</a>");
+                out.println("<a href='cambiarEstado?id=" + p.getIdProducto() + "&estado=1' class='btn btn-success btn-sm'>Activar</a>");
+
+            out.println("</td>");
+            out.println("</td>");
+            out.println("</tr>");
         }
 
+        out.println("</tbody>");
         out.println("</table>");
-        out.println("<a href='index.html'>Volver al inicio</a>");
-        out.println("</div>");
+        out.println("</div>"); // Fin contenido principal
+        out.println("</div>"); // Fin flex
+
+        out.println("<script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js'></script>");
         out.println("</body>");
         out.println("</html>");
     }
