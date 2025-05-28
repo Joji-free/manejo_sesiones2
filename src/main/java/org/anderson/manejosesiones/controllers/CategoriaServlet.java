@@ -35,6 +35,6 @@ public class CategoriaServlet extends HttpServlet {
         req.setAttribute("categorias", categorias);
         req.setAttribute("userName", userName);
         //redireccionamos a la vista categoria
-        getServletContext().getRequestDispatcher("/categoriaListar.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/categorialistar.jsp").forward(req, resp);
     }
 }

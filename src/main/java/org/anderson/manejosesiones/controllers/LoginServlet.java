@@ -18,8 +18,7 @@ public class LoginServlet extends HttpServlet {
     final static String PASSWORD = "1234";
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         LoginService auth = new LoginServiceSessionImplement();
         Optional<String> usernameOptional = auth.getUserName(req);
@@ -34,8 +33,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String username = req.getParameter("username");
         String password = req.getParameter("password");
