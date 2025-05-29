@@ -21,20 +21,26 @@ import java.util.Optional;
 public class CategoriaServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //Creamos la conexion
-        Connection conn = (Connection)req.getAttribute("conn");
-        //Creamos el nuevo objeto de categorias
+        // Obtenemos la conexión a la base de datos desde el atributo de la solicitud
+        Connection conn = (Connection) req.getAttribute("conn");
+
+        // Creamos una instancia del servicio de categorías con la conexión actual
         CategoriaService service = new CategoriaServiceJdbcImplement(conn);
+
+        // Obtenemos la lista de todas las categorías desde la base de datos
         List<Categoria> categorias = service.listar();
 
-        //Obtengo el username
+        // Creamos una instancia del servicio de autenticación para obtener el nombre del usuario actual
         LoginService auth = new LoginServiceSessionImplement();
-        Optional<String> userName= auth.getUserName(req);
+        Optional<String> userName = auth.getUserName(req);
 
-        //Seteamos los paramatros
+        // Establecemos la lista de categorías como atributo de la solicitud para enviarla a la vista
         req.setAttribute("categorias", categorias);
-        req.setAttribute("userName", userName);
-        //redireccionamos a la vista categoria
+
+        // Establecemos el nombre del usuario como atributo de la solicitud (si está presente)
+        req.setAttribute("username", userName);
+
+        // Redirigimos la solicitud y la respuesta a la vista JSP que mostrará las categorías
         getServletContext().getRequestDispatcher("/categorialistar.jsp").forward(req, resp);
     }
 }
