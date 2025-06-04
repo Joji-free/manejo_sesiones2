@@ -10,5 +10,6 @@ public interface Repository <T>{
     List<T> listar() throws SQLException;
     T porId(Long id) throws SQLException;
     void guardar(T t) throws SQLException;
+    void cambiarEstado(Long id, boolean estado) throws SQLException;
     void eliminar(Long id) throws SQLException;
 }

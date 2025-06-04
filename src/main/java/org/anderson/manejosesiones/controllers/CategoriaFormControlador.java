@@ -9,7 +9,6 @@ import org.anderson.manejosesiones.models.Categoria;
 import org.anderson.manejosesiones.services.CategoriaService;
 import org.anderson.manejosesiones.services.CategoriaServiceJdbcImplement;
 
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.Optional;
@@ -17,70 +16,84 @@ import java.util.Optional;
 @WebServlet("/categoria/form")
 public class CategoriaFormControlador extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req,
-                         HttpServletResponse resp) throws ServletException,
-            IOException {
-        //traemos la conexión a la base de datos
-        Connection conn = (Connection) req.
-                getAttribute("conn");
-        CategoriaService service = new
-                CategoriaServiceJdbcImplement(conn);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Código existente (sin cambios)
+        Connection conn = (Connection) req.getAttribute("conn");
+        CategoriaService service = new CategoriaServiceJdbcImplement(conn);
         Long id;
-        //Validamos que el campo ingresado sea un
-        //número
-        try{
-            //En la variable id guardamos lo que
-            //estamos mapeano por el mpetodo get idCategoria
-            id=Long.parseLong(req.getParameter("idCategoria"));
-        }catch(NumberFormatException e){
-            id=0L;
+
+        try {
+            id = Long.parseLong(req.getParameter("id"));
+        } catch (NumberFormatException e) {
+            id = 0L;
         }
 
-        //Creamos un objeto Categoria vacio
         Categoria categorias = new Categoria();
-        //Verificamos si el id > 0
-        if (id>0){
-            //Creamos una variable de tipo optional
-            //para obtener la categoria por id
-            Optional<Categoria> optionalCategoria=
-                    service.porId(id);
-            //Si la variable optional esta presente
-            //obtenemos todos los valores
-            if(optionalCategoria.isPresent()){
-                categorias=optionalCategoria.get();
+        if (id > 0) {
+            Optional<Categoria> optionalCategoria = service.porId(id);
+            if (optionalCategoria.isPresent()) {
+                categorias = optionalCategoria.get();
             }
         }
-        //Seteamos loa atributos en el alcance de
-        //request
         req.setAttribute("categorias", categorias);
-        getServletContext().getRequestDispatcher("/formularioCategoria.jsp").forward(req,resp);
+        getServletContext().getRequestDispatcher("/formularioCategoria.jsp").forward(req, resp);
     }
-    //Sobreescribimos el mpetodo doPost
+
     @Override
-    protected void doPost(HttpServletRequest req,
-                          HttpServletResponse resp) throws ServletException,
-            IOException {
-        Connection conn = (Connection) req.
-                getAttribute("conn");
-        CategoriaService service= new
-                CategoriaServiceJdbcImplement(conn);
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Connection conn = (Connection) req.getAttribute("conn");
+        CategoriaService service = new CategoriaServiceJdbcImplement(conn);
+
+        // Obtener parámetros
         String nombre = req.getParameter("nombre");
         String descripcion = req.getParameter("descripcion");
-        //Obtenemos el idCategoria
-        Long idCategoria;
-        try{
-            idCategoria=Long.parseLong(req.getParameter("idCategoria"));
-        }catch(NumberFormatException e){
-            idCategoria=0L;
+
+        // Validación de campos vacíos (nuevo código)
+        boolean tieneErrores = false;
+
+        if (nombre == null || nombre.trim().isEmpty()) {
+            req.setAttribute("errorNombre", "Es obligatorio llenar este campo");
+            tieneErrores = true;
         }
 
-        Categoria categoria=new Categoria();
-        categoria.setIdCategoria(idCategoria);
+        if (descripcion == null || descripcion.trim().isEmpty()) {
+            req.setAttribute("errorDescripcion", "Es obligatorio llenar este campo");
+            tieneErrores = true;
+        }
+
+        // Si hay errores, reenvía al formulario con los mensajes
+        if (tieneErrores) {
+            Long id;
+            try {
+                id = Long.parseLong(req.getParameter("id"));
+            } catch (NumberFormatException e) {
+                id = 0L;
+            }
+
+            Categoria categoria = new Categoria();
+            categoria.setIdCategoria(id);
+            categoria.setNombre(nombre != null ? nombre : "");
+            categoria.setDescripcion(descripcion != null ? descripcion : "");
+
+            req.setAttribute("categorias", categoria);
+            getServletContext().getRequestDispatcher("/formularioCategoria.jsp").forward(req, resp);
+            return;
+        }
+
+        // Si no hay errores, continúa con el proceso original
+        Long id;
+        try {
+            id = Long.parseLong(req.getParameter("id"));
+        } catch (NumberFormatException e) {
+            id = 0L;
+        }
+
+        Categoria categoria = new Categoria();
+        categoria.setIdCategoria(id);
         categoria.setNombre(nombre);
         categoria.setDescripcion(descripcion);
         service.guardar(categoria);
-        //Redireccionamos al listado para no nos
-        //ejecute el metodo doPost
-        resp.sendRedirect(req.getContextPath()+"/categoria");
+
+        resp.sendRedirect(req.getContextPath() + "/categoria");
     }
 }
