@@ -48,7 +48,8 @@ public class ProductosServlet extends HttpServlet {
         out.println("<div class='bg-light p-3' style='min-width: 200px; height: 100vh;'>");
         out.println("<h4 class='text-primary mb-4'>AndyProductos</h4>");
         out.println("<ul class='nav flex-column'>");
-        out.println("<li class='nav-item'><a class='nav-link' href='categoria'><i class='bi bi-speedometer2'></i> Escritorio</a></li>");
+        out.println("<li class='nav-item'><a class='nav-link' href='categoria'><i class='bi bi-speedometer2'></i> Categorias</a></li>");
+        out.println("<li class='nav-item'><a class='nav-link' href='articulo'><i class='bi bi-speedometer2'></i> Articulos</a></li>");
         out.println("<li class='nav-item'><a class='nav-link' href='logout'><i class='bi bi-box-arrow-in-right'></i> Logout</a></li>");
         out.println("</ul>");
         out.println("</div>");
